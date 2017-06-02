@@ -5,26 +5,54 @@ using UnityEngine;
 public class Spawner : MonoBehaviour {
 
 
-    public GameObject cube;
-    float screenWidth;
-    float halfOfThePlayer;
+    public GameObject[] ennemies;                    // Ennemys
+    public Vector3 spawnValues;                      // Position of the annemys
+                                                     
+    public float spawnWait;                          // Time
+    public float spawnMinWait;                       // Time
+    public float spawnMaxWait;                       // Time
+    public int startWait;                            // Time
 
-
-
+    public bool stop;                                // For stop the loop
+                                                     
+    int randEnemy;                                   // Random values
+                                                     
+                                                     
+	// Use this for initialization                   
 	void Start () {
 
-        halfOfThePlayer=gameObject.transform.localScale.x/2;
-        screenWidth=Camera.main.aspect*Camera.main.orthographicSize;
-
-	}
-    
+        StartCoroutine(WaitSpawner());                                 
+	}                                                
+	                                                 
+	// Update is called once per frame               
 	void Update () {
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Instantiate(cube, new Vector3(Random.Range(-screenWidth,screenWidth),0,10),Quaternion.Euler(0,45,0));
+        spawnWait=Random.Range(spawnMinWait, spawnMaxWait);                               
+	}                                                
+                                                     
+    IEnumerator WaitSpawner()                        
+    {                                                
+        yield return new WaitForSeconds(startWait);  
+                                                     
+        while(!stop)                                 
+        {                                            
+            // random between 0 and 1                
+            randEnemy=Random.Range(0,2);             
+                                                     
+            // spawn position                        
+            Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x ), 1,Random.Range(-spawnValues.z,spawnValues.z));
+
+            Instantiate(ennemies[randEnemy],spawnPosition + transform.TransformPoint(0,0,0), gameObject.transform.rotation);
+
+            yield return new WaitForSeconds(spawnWait);
+
         }
 
+    }
 
-	}
+
+
+
+
 }
+

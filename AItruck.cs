@@ -29,7 +29,6 @@ public class AItruck : MonoBehaviour {
       
 
     }
-
     IEnumerator waitSome()
     {
         // start wait
